@@ -5,6 +5,7 @@ import java.util.List;
 import com.avensys.employeesys.model.Employee;
 
 public interface EmployeeService {
+	
 	Employee addEmployee( Employee employee);
 	
 	List<Employee> getAllEmployees();

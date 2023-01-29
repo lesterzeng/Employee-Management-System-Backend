@@ -51,7 +51,10 @@ public class AuthController {
 		} else {
 		
 		Employee employee = new Employee();
+		employee.setFirstName(registerDto.getFirstName());
+		employee.setLastName(registerDto.getLastName());
 		employee.setEmail(registerDto.getEmail());
+		employee.setDepartment(registerDto.getDepartment());
 		employee.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 		
 		Role roles = roleRepository.findByName("USER").get();
