@@ -16,23 +16,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
 	
+	@Autowired
 	private JwtAuthEntryPoint authEntryPoint;
 	
+	@Autowired
 	private CustomUserDetailsService userDetailsService;
 	
 	
-	@Autowired
-	public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint) {
+
+
+	public SecurityConfig(JwtAuthEntryPoint authEntryPoint, CustomUserDetailsService userDetailsService) {
 		super();
-		this.userDetailsService = userDetailsService;
 		this.authEntryPoint = authEntryPoint;
+		this.userDetailsService = userDetailsService;
 	}
+
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -49,6 +54,7 @@ public class SecurityConfig {
 		.anyRequest().authenticated()
 		.and()
 		.httpBasic();
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 	
@@ -64,4 +70,8 @@ public class SecurityConfig {
 	        return new BCryptPasswordEncoder();
 	    }
 
+	  @Bean
+	  public JWTAuthenticationFilter jwtAuthenticationFilter() {
+		  return new JWTAuthenticationFilter();
+	  }
 }

@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.avensys.employeesys.dto.AuthResponseDto;
 import com.avensys.employeesys.dto.LoginDto;
 import com.avensys.employeesys.dto.RegisterDto;
 import com.avensys.employeesys.model.Employee;
 import com.avensys.employeesys.model.Role;
 import com.avensys.employeesys.repo.EmployeeRepo;
 import com.avensys.employeesys.repo.RoleRepo;
+import com.avensys.employeesys.security.JWTGenerator;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -29,14 +31,17 @@ public class AuthController {
 	private EmployeeRepo employeeRepository;
 	private RoleRepo roleRepository;
 	private PasswordEncoder passwordEncoder;
+	private JWTGenerator jwtGenerator;
+	
 	
 	public AuthController(AuthenticationManager authenticationManager, EmployeeRepo employeeRepository,
-			RoleRepo roleRepository, PasswordEncoder passwordEncoder) {
+			RoleRepo roleRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
 		super();
 		this.authenticationManager = authenticationManager;
 		this.employeeRepository = employeeRepository;
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.jwtGenerator = jwtGenerator;
 	}
 	
 	@PostMapping("register")
@@ -59,14 +64,14 @@ public class AuthController {
 	}
 	
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                 loginDto.getEmail(),
                 loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-//        String token = jwtGenerator.generateToken(authentication);
-        return new ResponseEntity<>("Great!!!", HttpStatus.OK);
+        String token = jwtGenerator.generateToken(authentication);
+        return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
     }
 
 	
