@@ -64,6 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		currentEmployee.setFirstName(employee.getFirstName());
 		currentEmployee.setLastName(employee.getLastName());
 		currentEmployee.setEmail(employee.getEmail());
+		currentEmployee.setDepartment(employee.getDepartment());
 		employeeRepository.save(currentEmployee);
 		return currentEmployee;
 		} catch (NoSuchElementException e){

@@ -80,7 +80,6 @@ public class Employee extends Auditable{
 	private Department department;
 	
 
-	
 	public long getId() {
 		return id;
 	}
@@ -118,5 +117,20 @@ public class Employee extends Auditable{
 		return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
 	}
 
+	public Employee(long id, @Size(min = 2, message = "First name should have at least 2 characters") String firstName,
+			@Size(min = 2, message = "Last name should have at least 2 characters") String lastName,
+			@NotEmpty @Email String email,
+			@Size(min = 8, message = "Password should have at least 8 characters") String password, List<Role> roles,
+			Department department) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+		this.department = department;
+	}
 
+	
 }

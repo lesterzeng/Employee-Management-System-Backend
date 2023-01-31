@@ -32,7 +32,7 @@ public class SecurityConfig {
 	
 
 
-	public SecurityConfig(JwtAuthEntryPoint authEntryPoint, CustomUserDetailsService userDetailsService) {
+	public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint) {
 		super();
 		this.authEntryPoint = authEntryPoint;
 		this.userDetailsService = userDetailsService;
@@ -42,6 +42,8 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		http
+		.cors()
+		.and()
 		.csrf().disable()
 		.exceptionHandling()
 		.authenticationEntryPoint(authEntryPoint)
@@ -77,3 +79,8 @@ public class SecurityConfig {
 		  return new JWTAuthenticationFilter();
 	  }
 }
+
+//.requestMatchers("/employees/**")
+//.hasAuthority("USER")
+//.requestMatchers("/departments/**")
+//.hasAnyRole("ADMIN","USER")

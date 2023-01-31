@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ import com.avensys.employeesys.security.JWTGenerator;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins="http://localhost:3000")
 public class AuthController {
 
 	private AuthenticationManager authenticationManager;
@@ -45,10 +47,10 @@ public class AuthController {
 	}
 	
 	@PostMapping("register")
-	public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
-		if(employeeRepository.existsByEmail(registerDto.getEmail())) {
-			return new ResponseEntity<>("Email is taken", HttpStatus.BAD_REQUEST);
-		} else {
+	public ResponseEntity<AuthResponseDto> register(@RequestBody RegisterDto registerDto){
+//		if(employeeRepository.existsByEmail(registerDto.getEmail())) {
+//			return new ResponseEntity<>(new AuthResponseDto("Email is taken", null) HttpStatus.BAD_REQUEST);
+//		} else {
 		
 		Employee employee = new Employee();
 		employee.setFirstName(registerDto.getFirstName());
@@ -62,8 +64,8 @@ public class AuthController {
 		
 		employeeRepository.save(employee);
 		
-		return new ResponseEntity<>("User Registration Success!", HttpStatus.OK);
-		}
+		return new ResponseEntity<>(new AuthResponseDto("User Registration Success!", null), HttpStatus.OK);
+//		}
 	}
 	
     @PostMapping("login")
