@@ -53,8 +53,12 @@ public class SecurityConfig {
 		.and()
 		.authorizeHttpRequests()
 		.requestMatchers("/api/auth/**").permitAll()
-		.requestMatchers("/employees/**").permitAll()
-		.requestMatchers("/departments/**").permitAll()
+//		.requestMatchers("/employees/**").permitAll()
+//		.requestMatchers("/departments/**").permitAll()
+		.requestMatchers("/employees/**")
+		.hasAuthority("ADMIN")
+		.requestMatchers("/departments/**")
+		.hasAuthority("ADMIN")
 		.anyRequest().authenticated()
 		.and()
 		.httpBasic();
@@ -80,7 +84,4 @@ public class SecurityConfig {
 	  }
 }
 
-//.requestMatchers("/employees/**")
-//.hasAuthority("USER")
-//.requestMatchers("/departments/**")
-//.hasAnyRole("ADMIN","USER")
+
